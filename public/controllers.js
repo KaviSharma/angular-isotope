@@ -32,7 +32,7 @@ app.controller('IndexController', function ($scope, $cookies, LoginService) {
     $scope.loggedInUser = $cookies.loggedInUser;
 });
 
-app.controller("ProjectController", function ($scope, $log, TaskService, CategoryService) {
+app.controller("TodoController", function ($scope, $log, TaskService, CategoryService) {
     window.scope = $scope;
     var _tasks = $scope.tasks = TaskService.projects();
     $scope.noOfTask = _tasks.length;
@@ -42,6 +42,7 @@ app.controller("ProjectController", function ($scope, $log, TaskService, Categor
     $scope.categories = CategoryService.categories();
     $scope.submitButtonText = null;
     $scope.filterBy = '';
+    $scope.items = _tasks;
 
     $scope.$watch("tasks", function (oldval, newval) {
         $scope.noOfTask = _tasks.length;
@@ -59,14 +60,14 @@ app.controller("ProjectController", function ($scope, $log, TaskService, Categor
     });
 
     $scope.$watch('model', function (oldval, newval) {
-        if ($scope.model === null || $scope.model.id === null)
+        if ($scope.model == null || $scope.model.id == null)
             $scope.submitButtonText = 'Add';
         else
             $scope.submitButtonText = 'Update';
     });
 
     $scope.createOrUpdate = function (project) {
-        if (project.id === null) {
+        if (project.id == null) {
             var id = _.max(_tasks,function (p) {
                 return p.id;
             }).id || 0;

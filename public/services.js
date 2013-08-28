@@ -55,7 +55,7 @@ app.factory("CategoryService", function () {
                 categories.push({id: 2, name: 'Development'});
                 categories.push({id: 3, name: 'Testing'});
                 categories.push({id: 4, name: 'Overhead'});
-                categories.push({id: 4, name: 'Frustrating'});
+                categories.push({id: 5, name: 'Frustrating'});
             }
             return categories;
         }

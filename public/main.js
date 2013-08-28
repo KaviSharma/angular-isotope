@@ -16,12 +16,12 @@ app.config(function ($routeProvider) {
             controller: 'LogoutController',
             templateUrl: 'views/login.html'
         })
-        .when('/project', {
-            controller: "ProjectController",
-            templateUrl: "views/project/home.html"
+        .when('/todo', {
+            controller: "TodoController",
+            templateUrl: "views/todo/home.html"
         })
         .otherwise({
-            controller: 'HomeController',
-            templateUrl: 'views/home.html'
+            controller: 'ProjectController',
+            templateUrl: 'views/todo/index.html'
         });
 });
