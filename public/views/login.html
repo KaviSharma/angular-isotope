@@ -1,0 +1,14 @@
+<div>
+    <form ng-submit="login()">
+        <p>Login page</p>
+
+        <p>To go back to login page click <a href="#/home">here</a></p>
+
+        <p>User name: <input type="text" ng-model="model.userName"></p>
+
+        <p>Password: <input type="password" ng-model="model.password"/></p>
+        <p>User Name is "{{model.userName}}"</p>
+        <p><input type="submit" value="Login"/></p>
+        <h2>{{message}}</h2>
+    </form>
+</div>

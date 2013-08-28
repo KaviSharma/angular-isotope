@@ -1,0 +1,90 @@
+<div class="span12">
+    <h2>Tasks ({{noOfTask}})</h2>
+</div>
+<div class="span12">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Task Name</td>
+            <td>Category</td>
+            <td style="width: 30px"></td>
+            <td style="width: 30px;"></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="5">
+                <div class="form-inline well">
+                    <form ng-submit="createOrUpdate(model)">
+                        <label for="name">Name: </label><input id="name" type="text" placeholder="Task name...."
+                                                               ng-model="model.name" autofocus>
+                        <label for="category">Category:</label>
+                        <select id="category" name="SelectedCategory" ng-model="selectedCategory"
+                                ng-options="category.name for category in categories"></select>
+                        <input type="submit" value="{{submitButtonText}}" class="btn btn-info">
+                        <input type="submit" value="Cancel" class="btn" ng-click="cancel()">
+                    </form>
+                </div>
+            </td>
+        </tr>
+        <tr ng-repeat="task in tasks" ng-model="tasks">
+            <td>{{task.id}}</td>
+            <td>{{task.name}}</td>
+            <td>{{task.categoryId}}</td>
+            <td>
+                <button class="btn btn-small btn-info" ng-click="deleteTask(task)">Delete</button>
+            </td>
+            <td>
+                <button class="btn btn-small btn-info" ng-click="edit(task)">Edit</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="span12">
+    Sort By:
+    <div class="btn-group">
+        <button type="button" class="btn" ng-model="sortBy" btn-radio="'name'">Name</button>
+        <button type="button" class="btn" ng-model="sortBy" btn-radio="'category'">Category</button>
+        <button type="button" class="btn" ng-model="sortBy" btn-radio="'id'">Id</button>
+    </div>
+    Sort Order:
+    <div class="btn-group">
+        <button type="button" class="btn" ng-model="sortOrder" btn-radio="true">Ascending</button>
+        <button type="button" class="btn" ng-model="sortOrder" btn-radio="false">Descending</button>
+    </div>
+</div>
+<div class="span12">
+    &nbsp;
+</div>
+<div class="span12">
+    Filter by:
+    <div class="btn-group">
+        <button type="button" class="btn ng-scope ng-pristine ng-valid ng-binding" ng-model="filterBy" btn-radio="''">None
+        </button>
+        <button type="button" class="btn ng-scope ng-pristine ng-valid ng-binding" ng-model="filterBy" btn-radio="'[category-id=\'1\']'">Personal
+        </button>
+        <button type="button" class="btn ng-scope ng-pristine ng-valid ng-binding" ng-model="filterBy" btn-radio="'[category-id=\'2\']'">Development
+        </button>
+        <button type="button" class="btn ng-scope ng-valid ng-binding ng-dirty active" ng-model="filterBy" btn-radio="'[category-id=\'3\']'">Testing
+        </button>
+        <button type="button" class="btn ng-scope ng-valid ng-binding ng-dirty active" ng-model="filterBy" btn-radio="'[category-id=\'4\']'">Overhead
+        </button>
+        <button type="button" class="btn ng-scope ng-valid ng-binding ng-dirty active" ng-model="filterBy" btn-radio="'[category-id=\'5\']'">Frustrating
+        </button>
+    </div>
+</div>
+<div class="span12">
+    &nbsp;
+</div>
+<div class="span12">
+    <ul class="thumbnails">
+        <li class="span3 {{task.id}}" ng-repeat="task in tasks" data-iso-rpt="items" data-sort-by="sortBy" category-id="{{task.categoryId}}"
+            data-sort-order="sortOrder">
+            <div class="thumbnail" task-id="{{task.id}}" task-category="{{task.category}}">
+                <h2>{{task.name}}</h2>
+            </div>
+        </li>
+    </ul>
+</div>
