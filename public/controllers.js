@@ -14,8 +14,8 @@ app.controller('LoginController', function ($scope, $location, $cookies, LoginSe
         if (res) {
             $cookies.loggedInUser = $scope.model.userName;
             $cookies.isAutenticated = true;
-
-            $location.path("#/home?login=1");
+            window.location = "#todo"
+//            $location.hash("todo");
         }
         else {
             $scope.message = "Invalid user name or password.";
@@ -32,9 +32,9 @@ app.controller('IndexController', function ($scope, $cookies, LoginService) {
     $scope.loggedInUser = $cookies.loggedInUser;
 });
 
-app.controller("TodoController", function ($scope, $log, TaskService, CategoryService) {
+app.controller("TodoController", function ($scope, $log, TaskFactory, CategoryService) {
     window.scope = $scope;
-    var _tasks = $scope.tasks = TaskService.projects();
+    var _tasks = $scope.tasks = [];
     $scope.noOfTask = _tasks.length;
     $scope.model = null;
     $scope.sortBy = 'name';
@@ -44,6 +44,14 @@ app.controller("TodoController", function ($scope, $log, TaskService, CategorySe
     $scope.filterBy = '';
     $scope.items = _tasks;
 
+    function loadTasks() {
+        TaskFactory.tasks().then(function (data) {
+            _tasks = $scope.tasks = data;
+        }, function (e) {
+            alert("Error while fetching task.");
+        });
+    }
+
     $scope.$watch("tasks", function (oldval, newval) {
         $scope.noOfTask = _tasks.length;
     }, true);
@@ -51,8 +59,12 @@ app.controller("TodoController", function ($scope, $log, TaskService, CategorySe
     $scope.$watch("categories", function (oldval, newval) {
     }, true);
 
-    $scope.deleteTask = function (project) {
-        _tasks.splice(_tasks.indexOf(project), 1);
+    $scope.deleteTask = function (task) {
+        TaskFactory.delete(task).then(function (data) {
+            _tasks.splice(_tasks.indexOf(task), 1);
+        }, function (error) {
+            alert("Error while deleting task");
+        });
     }
 
     $scope.$watch('new', function (newval, oldval) {
@@ -60,29 +72,30 @@ app.controller("TodoController", function ($scope, $log, TaskService, CategorySe
     });
 
     $scope.$watch('model', function (oldval, newval) {
-        if ($scope.model == null || $scope.model.id == null)
+        if ($scope.model == null || !($scope.model._id))
             $scope.submitButtonText = 'Add';
         else
             $scope.submitButtonText = 'Update';
     });
 
-    $scope.createOrUpdate = function (project) {
-        if (project.id == null) {
-            var id = _.max(_tasks,function (p) {
-                return p.id;
-            }).id || 0;
-            project.id = id + 1;
-            project.categoryId = $scope.selectedCategory.id;
-            _tasks.push(project);
+    $scope.createOrUpdate = function (task) {
+        console.log(task._id);
+        var isNew = task._id ? false : true;
+        task.categoryId = $scope.selectedCategory.id;
+        TaskFactory.save(task).then(function (data) {
+            if (isNew)
+                _tasks.push(task);
             $scope.model = null;
-        }
-        $scope.model = null;
-        $scope.selectedCategory = null;
+            $scope.selectedCategory = null;
+
+        }, function () {
+            alert("Error while deleting task.");
+        });
     }
 
-    $scope.edit = function (project) {
-        $scope.model = project;
-        $scope.selectedCategory = _.findWhere($scope.categories, {id: project.categoryId});
+    $scope.edit = function (task) {
+        $scope.model = task;
+        $scope.selectedCategory = _.findWhere($scope.categories, {id: task.categoryId});
     }
 
     $scope.cancel = function () {
@@ -90,4 +103,5 @@ app.controller("TodoController", function ($scope, $log, TaskService, CategorySe
         $scope.selectedCategory = null;
     }
 
+    loadTasks();
 });

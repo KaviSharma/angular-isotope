@@ -27,8 +27,8 @@ app.factory("TaskService", function () {
                 tasks.push({id: 2, name: "Perform unit testing.", categoryId: 3});
                 tasks.push({id: 3, name: "Buy some food.", categoryId: 1});
                 tasks.push({id: 4, name: "Go to temple.", categoryId: 1});
-                tasks.push({id: 2, name: "Learn about Angular.", categoryId: 2});
-                tasks.push({id: 2, name: "Management meetings.", categoryId: 5});
+                tasks.push({id: 5, name: "Learn about Angular.", categoryId: 2});
+                tasks.push({id: 6, name: "Management meetings.", categoryId: 5});
             }
             return tasks;
         },

@@ -1,13 +1,16 @@
 {
-  "name": "timesheet",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "nodemon app.js localhost 3000"
-  },
-  "dependencies": {
-    "express": "3.3.5",
-    "jade": "*",
-    "nodemon": "*"
-  }
+    "name": "timesheet",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "nodemon app.js localhost 3000"
+    },
+    "dependencies": {
+        "express": "3.3.5",
+        "consolidate": "*",
+        "jade": "*",
+        "nodemon": "*",
+        "mongodb": "*",
+        "monk": "*"
+    }
 }
