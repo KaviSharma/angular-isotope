@@ -38,13 +38,14 @@ function sendPin(data) {
     else {// code for IE6, IE5
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    xmlhttp.open("POST", "http://localhost:5000/api/pins/save", true);
+    xmlhttp.open("POST", "http://angular-isotope.herokuapp.com/api/pins/save", true);
     xmlhttp.setRequestHeader("Content-type", "application/json");
 
     xmlhttp.send(JSON.stringify(data));
     alert("Image pinned");
     restore();
 }
+
 function showPopover() {
     // create overlay and append to page
 
