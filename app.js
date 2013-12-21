@@ -15,8 +15,23 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('mongodb://public:public1234@ds061228.mongolab.com:61228/mongo-shared');
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+        res.send(200);
+    }
+    else {
+        next();
+    }
+};
+
 var app = express();
 
+app.use(allowCrossDomain);
 // all environments
 app.set('port', process.env.PORT || 5000);
 
@@ -46,6 +61,9 @@ if ('development' == app.get('env')) {
 app.get('/api/tasks', routes.tasks(db))
 app.post('/api/tasks/save', routes.saveTask(db))
 app.post('/api/tasks/delete', routes.deleteTask(db))
+
+app.get('/api/pins', routes.pins(db))
+app.post('/api/pins/save', routes.savePin(db))
 
 
 //http.createServer(app).listen(app.get('port'), function(){

@@ -53,3 +53,22 @@ exports.deleteTask = function (db) {
         res.json("done");
     }
 }
+
+exports.savePin = function (db) {
+    return function (req, res) {
+        var collection = db.get("pinCollection");
+        console.log(req.body);
+        var task = req.body; //JSON.parse(req.body);
+        collection.insert(task);
+        res.json("done");
+    }
+}
+
+exports.pins = function (db) {
+    return function (req, res) {
+        var collection = db.get('pinCollection');
+        collection.find({}, {}, function (e, docs) {
+            res.json(docs);
+        });
+    }
+}

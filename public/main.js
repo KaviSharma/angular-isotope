@@ -20,6 +20,10 @@ app.config(function ($routeProvider) {
             controller: "TodoController",
             templateUrl: "views/todo/home.html"
         })
+        .when('/bl', {
+            controller: "BLController",
+            templateUrl: "views/bl/home.html"
+        })
         .otherwise({
             controller: 'ProjectController',
             templateUrl: 'views/todo/index.html'

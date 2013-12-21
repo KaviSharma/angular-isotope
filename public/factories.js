@@ -38,3 +38,19 @@ app.factory('TaskFactory', function ($http, $q) {
         }
     }
 });
+
+app.factory('PinFactory', function ($http, $q) {
+    return {
+        pins: function () {
+            var deferred = $q.defer();
+            $http.get('/api/pins/')
+                .success(function (data, status, headers, config) {
+                    deferred.resolve(data, status, headers, config);
+                })
+                .error(function () {
+                    deferred.reject("An error occured while fetching pins");
+                });
+            return deferred.promise;
+        }
+    }
+});

@@ -42,7 +42,6 @@ app.controller("TodoController", function ($scope, $log, TaskFactory, CategorySe
     $scope.categories = CategoryService.categories();
     $scope.submitButtonText = null;
     $scope.filterBy = '';
-    $scope.items = _tasks;
 
     function loadTasks() {
         TaskFactory.tasks().then(function (data) {
@@ -104,4 +103,21 @@ app.controller("TodoController", function ($scope, $log, TaskFactory, CategorySe
     }
 
     loadTasks();
+});
+
+app.controller('BLController', function ($scope, PinFactory) {
+    $scope.noOfPins = 0;
+    var _pins = $scope.pins = [];
+
+    function loadPins() {
+        _pins = $scope.pins = PinFactory.pins();
+        window._pins = _pins;
+        $scope.noOfTask = _pins.length;
+    }
+
+    $scope.$watch("pins", function (oldval, newval) {
+        $scope.noOfTask = _pins.length;
+    }, true);
+
+    loadPins();
 });
