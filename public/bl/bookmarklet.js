@@ -258,7 +258,7 @@ window.bookmarklet = {
     },
     executeMyBookmarklet: function () {
         window.bookmarklet.execute({
-            css: 'http://localhost:5000/bl/bl.css',
+            css: 'http://angular-isotope.herokuapp.com/bl/bl.css',
             ready: function ($) {
                 showPopover();
             }
