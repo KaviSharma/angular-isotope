@@ -13,7 +13,8 @@ var engines = require('consolidate');
 //setup mongodb
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('mongodb://public:public1234@ds061228.mongolab.com:61228/mongo-shared');
+//var db = monk('mongodb://public:public1234@ds061228.mongolab.com:61228/mongo-shared');
+var db = monk('mongodb://s4.turretlabs.com:27017/asks');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
