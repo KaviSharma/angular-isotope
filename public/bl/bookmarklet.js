@@ -8,6 +8,8 @@
  */
 
 "use strict";
+var baseUrl = 'http://angular-isotope.herokuapp.com';
+//var baseUrl = 'http://localhost:5000';
 
 function getMaxImage() {
     var maxDimension = 0;
@@ -29,8 +31,7 @@ function getMaxImage() {
     else
         return null;
 }
-
-function sendPin(data) {
+function getXmlHttp() {
     var xmlhttp;
     if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
@@ -38,12 +39,105 @@ function sendPin(data) {
     else {// code for IE6, IE5
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    xmlhttp.open("POST", "http://angular-isotope.herokuapp.com/api/pins/save", true);
+    return xmlhttp;
+}
+
+function sendPin(data) {
+    var xmlhttp = getXmlHttp();
+    xmlhttp.open("POST", baseUrl + "/api/pins/save", true);
     xmlhttp.setRequestHeader("Content-type", "application/json");
 
     xmlhttp.send(JSON.stringify(data));
-    alert("Image pinned");
     restore();
+}
+
+function showPopover1() {
+    var orgImg = getMaxImage();
+    if (!orgImg) {
+        alert("No Image found");
+        return;
+    }
+
+    var request = getXmlHttp();
+    request.open("GET", baseUrl + "/views/popup.html");
+    request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+            //alert("request completed");
+            var container = document.createElement("div");
+            container.setAttribute("id", "pinit-div-popover-987989012233")
+            document.body.appendChild(container);
+
+            var html = request.response;
+            container.innerHTML = html;
+
+            var img = document.getElementById("pinit-product-img");
+            var description = document.getElementById("pinit-product-description");
+            var retailPrice = document.getElementById("pinit-retail-price");
+            var askPrice = document.getElementById("pinit-ask-price");
+            var category = document.getElementById("pinit-product-category");
+
+            description.value = getDescription();
+            retailPrice.setAttribute("value", getRetailPrice());
+            askPrice.setAttribute("value", getAskPrice());
+
+            img.src = orgImg;
+
+            var closeButton = document.getElementById("pinit-bth-close");
+            closeButton.onclick = function () {
+                restore();
+            }
+
+            var addButton = document.getElementById("pinit-btn-ask");
+
+            addButton.onclick = function () {
+                var description = document.getElementById("pinit-product-description").value;
+                var retailPrice = document.getElementById("pinit-retail-price").value;
+                var askPrice = document.getElementById("pinit-ask-price").value;
+                var category = document.getElementById("pinit-product-category").value;
+
+                var data = {imageUrl: orgImg, productName: description, retail: retailPrice, ask: askPrice, category: category};
+
+                sendPin(data);
+            }
+        }
+    }
+
+    request.send();
+}
+
+function getDescription() {
+    return getMetaPropertyValue("og:title");
+}
+
+function getRetailPrice() {
+    return getMetaValue("schemaorg-offer-price");
+}
+
+function getAskPrice() {
+    return getMetaValue("schemaorg-offer-price");
+}
+
+function getCategory() {
+
+}
+
+function getMetaValue(id) {
+    var ele = document.getElementById(id);
+    if (ele)
+        return ele.getAttribute("content") || '';
+    return "";
+}
+
+function getMetaPropertyValue(property) {
+    var metas = document.getElementsByTagName('meta');
+
+    for (var i = 0; i < metas.length; i++) {
+        if (metas[i].getAttribute("property") == property) {
+            return metas[i].getAttribute("content");
+        }
+    }
+
+    return "";
 }
 
 function showPopover() {
@@ -80,6 +174,10 @@ function showPopover() {
     closeButton.innerHTML = "Close";
 
     addButton.onclick = function () {
+        var description = document.getElementById("pinit-product-description").value;
+        var retailPrice = document.getElementById("pinit-retail-price").value;
+        var askPrice = document.getElementById("pinit-ask-price").value;
+
         var data = {img: orgImg, title: document.title};
         sendPin(data);
     }
@@ -102,8 +200,10 @@ function showPopover() {
 
 // restore page to normal
 function restore() {
-    document.body.removeChild(document.getElementById("overlay"));
-    document.body.removeChild(document.getElementById("img"));
+//    document.body.removeChild(document.getElementById("img"));
+//    document.body.removeChild(document.getElementById("overlay"));
+    document.body.removeChild(document.getElementById("pinit-div-popover-987989012233"));
+//    document.body.removeChild(document.getElementById("overlay"));
 }
 
 
@@ -258,9 +358,9 @@ window.bookmarklet = {
     },
     executeMyBookmarklet: function () {
         window.bookmarklet.execute({
-            css: 'http://angular-isotope.herokuapp.com/bl/bl.css',
+            css: baseUrl + '/bl/bl.css',
             ready: function ($) {
-                showPopover();
+                showPopover1();
             }
         })
     }

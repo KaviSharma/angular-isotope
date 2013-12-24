@@ -56,7 +56,7 @@ exports.deleteTask = function (db) {
 
 exports.savePin = function (db) {
     return function (req, res) {
-        var collection = db.get("pinCollection");
+        var collection = db.get("Ask1");
         console.log(req.body);
         var task = req.body; //JSON.parse(req.body);
         collection.insert(task);
@@ -66,7 +66,7 @@ exports.savePin = function (db) {
 
 exports.pins = function (db) {
     return function (req, res) {
-        var collection = db.get('pinCollection');
+        var collection = db.get('Ask1');
         collection.find({}, {}, function (e, docs) {
             res.json(docs);
         });
